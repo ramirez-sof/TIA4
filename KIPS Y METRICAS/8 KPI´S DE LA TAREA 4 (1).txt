@@ -1,0 +1,103 @@
+1ER KPI
+--Productos que tuvieron un incremento en las cantidades vendidas en 2023 comparado con las ventas de 2022
+SELECT 
+    producto,
+    SUM(CASE WHEN anio = 2022 THEN cantidad ELSE 0 END) AS cantidad_2022,
+    SUM(CASE WHEN anio = 2023 THEN cantidad ELSE 0 END) AS cantidad_2023,
+    SUM(CASE WHEN anio = 2023 THEN cantidad ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 THEN cantidad ELSE 0 END) AS diferencia    
+FROM vista_operaciones_anio
+GROUP BY 
+    producto
+ORDER BY 
+    diferencia DESC;
+
+2DO KPI
+--Productos que tuvieron un incremento en los montos de 2023 comparado con las ventas de 2022
+SELECT 
+    producto,
+    SUM(CASE WHEN anio = 2022 THEN venta ELSE 0 END) AS monto_2022,
+    SUM(CASE WHEN anio = 2023 THEN venta ELSE 0 END) AS monto_2023,
+    SUM(CASE WHEN anio = 2023 THEN venta ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 THEN venta ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio
+GROUP BY 
+    producto
+ORDER BY 
+    diferencia DESC;
+
+
+3ER KPI
+--Los cinco (5) municipios con mejor desempeño en montos de venta en 2023 comparado con las cifras de 2022.
+SELECT id_municipio,municipio,
+    SUM(CASE WHEN anio = 2022 THEN venta ELSE 0 END) AS monto_2022,
+    SUM(CASE WHEN anio = 2023 THEN venta ELSE 0 END) AS monto_2023,
+    SUM(CASE WHEN anio = 2023 THEN venta ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 THEN venta ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio
+GROUP BY 
+    id_municipio,municipio
+ORDER BY 
+    diferencia DESC LIMIT 5;
+
+
+4TO KPI
+--Los cinco (5) departamentos que tuvieron peor desempeño de cantidad de unidades vendidas del producto NARANJITA de la Región Caribe en 2023 comparado con los resultados de 2022.
+SELECT departamento,producto,
+    SUM(CASE WHEN anio = 2022 THEN cantidad ELSE 0 END) AS cantidad_2022,
+    SUM(CASE WHEN anio = 2023 THEN cantidad ELSE 0 END) AS cantidad_2023,
+    SUM(CASE WHEN anio = 2023 THEN cantidad ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 THEN cantidad ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio
+WHERE 
+    producto = 'NARANJITA' AND
+    departamento IN ('Atlántico','Bolívar','Cesar','Córdoba','La Guajira','Magdalena','Sucre','San Andrés y Providencia')
+GROUP BY 
+    departamento,producto
+ORDER BY 
+    diferencia ASC
+LIMIT 5;
+
+
+5TO KPI
+--Comparativo de montos de venta del producto COLOMBIANITA por departamento 2022 vs 2023
+SELECT 
+    departamento,producto,
+    SUM(CASE WHEN anio = 2022 THEN cantidad ELSE 0 END) AS monto_2022,
+    SUM(CASE WHEN anio = 2023 THEN cantidad ELSE 0 END) AS monto_2023,
+    SUM(CASE WHEN anio = 2023 THEN cantidad ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 THEN cantidad ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio
+WHERE producto = 'COLOMBIANITA'
+GROUP BY departamento,producto
+ORDER BY diferencia DESC;
+
+6TO KPI
+--Comparacion en los meses julio 2022 vs julio 2023 para el producto MANGOSON
+SELECT 
+    producto,
+    SUM(CASE WHEN anio = 2022 AND mes = 7 THEN cantidad ELSE 0 END) AS julio_2022,
+    SUM(CASE WHEN anio = 2023 AND mes = 7 THEN cantidad ELSE 0 END) AS julio_2023,
+    SUM(CASE WHEN anio = 2023 AND mes = 7 THEN cantidad ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 AND mes = 7 THEN cantidad ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio
+WHERE producto = 'MANGOSON'
+GROUP BY producto;
+
+7MO KPI
+--Comparativo de monto total vendido en el primer trimestre: 2022 vs 2023
+SELECT 
+    SUM(CASE WHEN anio = 2022 AND mes BETWEEN 1 AND 3 THEN cantidad ELSE 0 END) AS trimestre_2022,
+    SUM(CASE WHEN anio = 2023 AND mes BETWEEN 1 AND 3 THEN cantidad ELSE 0 END) AS trimestre_2023,
+    SUM(CASE WHEN anio = 2023 AND mes BETWEEN 1 AND 3 THEN cantidad ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 AND mes BETWEEN 1 AND 3 THEN cantidad ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio;
+
+8VO KPI
+--Desempeño del último trimestre en monto de ventas en los años 2022 vs 2023
+SELECT 
+    SUM(CASE WHEN anio = 2022 AND mes BETWEEN 10 AND 12 THEN venta ELSE 0 END) AS ultimo_trimestre_2022,
+    SUM(CASE WHEN anio = 2023 AND mes BETWEEN 10 AND 12 THEN venta ELSE 0 END) AS ultimo_trimestre_2023,
+    SUM(CASE WHEN anio = 2023 AND mes BETWEEN 10 AND 12 THEN venta ELSE 0 END) - 
+    SUM(CASE WHEN anio = 2022 AND mes BETWEEN 10 AND 12 THEN venta ELSE 0 END) AS diferencia
+FROM vista_operaciones_anio;

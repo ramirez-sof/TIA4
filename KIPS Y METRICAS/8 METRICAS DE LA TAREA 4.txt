@@ -1,0 +1,88 @@
+1era metrica
+
+--Los diez (10) municipios con mayor cantidad de gaseosas vendidas en 2023
+SELECT id_municipio,municipio, SUM(cantidad) AS cantidad,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio
+FROM vista_operaciones
+WHERE EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY id_municipio,municipio, anio
+ORDER BY cantidad DESC LIMIT 10
+
+2da metrica
+--Los cinco (5) departamentos con menor monto ventas de gaseosas en 2023
+SELECT id_departamento, departamento, SUM(cantidad) AS cantidad,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio
+FROM vista_operaciones
+WHERE EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY id_departamento, departamento,cantidad, anio
+ORDER BY cantidad ASC LIMIT 5
+
+3ra metrica
+--Los cinco (5) departamentos con menor monto ventas de gaseosas en 2023
+SELECT id_municipio, municipio,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio,
+EXTRACT(MONTH FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS mes,
+SUM(cantidad) AS cantidad
+FROM vista_operaciones
+WHERE EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+AND EXTRACT(MONTH FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 5
+GROUP BY id_municipio, municipio, anio, mes
+ORDER BY cantidad DESC LIMIT 10
+
+4ta metrica
+--Total de montos de ventas por producto en la Región Caribe en 2023
+SELECT producto,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio,
+SUM(cantidad * precio) AS total_monto
+FROM vista_operaciones
+WHERE departamento IN ('Atlántico', 'Bolívar', 'Cesar', 'Córdoba', 'La Guajira', 'Magdalena', 'Sucre', 'San Andrés y Providencia')
+AND EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY producto, anio
+ORDER BY total_monto DESC;
+
+
+5ta metrica
+--Total de cantidades vendidas por producto en la Región Centro Sur
+SELECT producto,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio,
+SUM(cantidad) AS total_cantidad
+FROM vista_operaciones
+WHERE departamento IN ('Bogotá D.C.', 'Cundinamarca', 'Tolima', 'Huila', 'Caquetá', 'Putumayo', 'Amazonas')
+AND EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY producto, anio
+ORDER BY total_cantidad DESC;
+
+
+6ta metrica
+--Cantidad total de productos vendidos por departamento en 2023
+SELECT id_departamento,departamento,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio,
+SUM(cantidad) AS total_vendidos
+FROM vista_operaciones
+WHERE EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY id_departamento,departamento,anio
+ORDER BY total_vendidos DESC;
+
+
+7tima metrica
+--Diez departamentos y municipios con peor total de unidades vendidas en 2023
+SELECT departamento,id_municipio,municipio,producto,
+SUM(cantidad) AS total_vendido,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio
+FROM vista_operaciones
+WHERE EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY departamento,id_municipio,municipio,producto,anio
+ORDER BY total_vendido ASC LIMIT 10;
+
+8va metrica
+--Los diez departamentos y municipios con mejor venta de COLOMBIANITA en el 2023
+SELECT departamento,id_municipio,municipio,producto, SUM(cantidad) AS total_vendido,
+EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) AS anio
+FROM vista_operaciones
+WHERE producto = 'COLOMBIANITA'
+AND EXTRACT(YEAR FROM TO_DATE(fecha, 'YYYY-MM-DD')) = 2023
+GROUP BY departamento,id_municipio,producto,municipio,anio
+ORDER BY total_vendido DESC
+LIMIT 10;
+
+
